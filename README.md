@@ -1,90 +1,123 @@
-# Multi-faceted_Pharmaceutical_BI_Project
-This project provides a multi-faceted data analysis pipeline for the pharmaceutical domain, integrating machine learning, time-series forecasting, and NLP to solve real-world business problems
-# 📊 Multi-faceted Pharmaceutical Business Intelligence Project
+📊 Multi-Faceted Pharmaceutical Business Intelligence Project
 
-## Project Overview
-This project provides a comprehensive data analysis pipeline for the pharmaceutical domain, addressing **patient risk stratification, sales forecasting, and pharmacovigilance**.
-By leveraging **machine learning, time-series forecasting, and natural language processing (NLP)**, the project delivers actionable insights to:
+This project demonstrates a comprehensive Business Intelligence (BI) pipeline for the pharmaceutical domain, integrating data analysis, machine learning, time-series forecasting, and natural language processing (NLP) to deliver actionable insights across clinical, commercial  areas.
 
-- Improve **patient outcomes**
-- Optimize **sales and inventory planning**
-- Enhance **drug safety monitoring**
+🚀 Project Overview
 
----
+The project leverages Python libraries such as Pandas, NumPy, Scikit-learn, and Statsmodels to analyze multiple datasets from an SQLite database (pharma.db).
 
-## Business Questions Addressed
-1. **Patient Risk:** What are the key risk factors for heart disease, and can we predict high-risk patients?
-2. **Sales Forecasting:** What are the forecasted monthly sales for key drugs like *Atorvastatin*?
-3. **Drug Safety:** Can adverse drug event (AE) reports be automatically classified into *serious* vs. *non-serious*?
+It covers:
 
----
+👥 Patient segmentation & heart disease risk prediction
 
-## Data Sources
-The analysis uses a relational database (`pharma.db`) containing five interconnected tables:
+💊 Drug sales forecasting
 
-- **patients** → demographic & clinical data
-- **labs** → lab test results (e.g., LDL, HDL)
-- **prescriptions** → drug prescription records
-- **sales_monthly** → monthly sales data for drugs
-- **ae_reports** → patient-reported adverse event text data
+📑 Adverse Event (AE) classification with NLP
 
----
+This multi-faceted approach helps pharmaceutical stakeholders in clinical decision-making, commercial planning, and pharmacovigilance.
 
-## Methodology
+📂 Datasets
 
-### 1. Heart Disease Prediction 🩺
-- Combined patient, lab, and prescription data into a feature set
-- Preprocessed & balanced data using **SMOTE**
-- Trained models: **Logistic Regression, Random Forest, Gradient Boosting**
-- **Random Forest** performed best
-- Applied **SHAP** to identify top predictors
+Five datasets are used in this project:
 
-### 2. Sales Forecasting 📈
-- Built **SARIMA (Seasonal ARIMA)** model for Atorvastatin sales
-- Achieved **MAPE = 3.71%**
-- Provided **12-month forecasts with seasonal peaks** for inventory planning
+patients – Demographic & health info for 5,000 patients (age, sex, BMI, conditions like diabetes, heart disease).
 
-### 3. Adverse Event Classification ⚕️
-- Implemented **NLP pipeline: TF-IDF + Logistic Regression**
-- Classified AE reports into *serious* / *non-serious*
-- Performance: **ROC-AUC = 0.88, F1-score = 0.87**
+labs – Lab test results (LDL, HDL, HbA1c) with 10,000+ entries.
 
----
+prescriptions – Drug prescriptions (drug name, dose, therapeutic area, class) with 7,500+ records.
 
-## Key Insights & Results
-- **Heart Disease Risk Factors (via SHAP):**
-  - ↑ LDL cholesterol, ↑ age, ↑ systolic BP, ↑ cholesterol → higher risk
-  - ↑ HDL and prior statin use → protective factors
+sales_monthly – Monthly drug sales over time (165 entries).
 
-- **Sales:** Reliable SARIMA forecasts enable proactive supply chain planning
+ae_reports – 2,000 adverse event reports labeled as serious or nonserious.
 
-- **Pharmacovigilance:** Automated AE classification accelerates safety reporting
+✅ Initial checks confirmed no missing values or duplicates.
 
----
+🛠️ Data Preparation & Feature Engineering
 
-## Technologies & Libraries
-- **Data Handling:** Pandas, SQLite
-- **ML Models:** Scikit-learn, Imbalanced-learn
-- **Time Series:** Statsmodels (SARIMA)
-- **NLP:** NLTK, TF-IDF
-- **Model Explainability:** SHAP
-- **Visualization:** Matplotlib, Seaborn
+Lab data merge – Added latest LDL, HDL, HbA1c results per patient.
 
----
+Prescription feature – Created a binary variable ever_statin to indicate statin history.
 
-## Setup & Execution
+Categorical encoding – Converted sex (M/F) to numeric values.
 
-1. Clone the repository.
-2. Ensure you have **Python 3.8+** installed.
-3. Install the required libraries:
-   ```bash
-   pip install pandas numpy scikit-learn statsmodels shap nltk matplotlib seaborn notebook
-   ```
-4. Download NLTK data:
-   ```python
-   import nltk
-   nltk.download('punkt')
-   nltk.download('wordnet')
-   ```
-5. Place the **`pharma.db`** database in the `/db` directory.
-6. Run the **`final.ipynb`** Jupyter Notebook to replicate the analysis.
+Outlier handling – Used Z-score detection & capping at 1st/99th percentiles to mitigate extreme values.
+
+❤️ Heart Disease Risk Prediction
+
+A classification pipeline was built to predict heart disease (heart_disease column).
+
+Challenge: Highly imbalanced target → addressed using SMOTE oversampling.
+
+Models Trained:
+
+Logistic Regression → Accuracy: 74%, Recall (positive class): 79%
+
+Random Forest → Accuracy: 94%, Balanced F1-score: 0.58
+
+Gradient Boosting → Accuracy: 85%, Recall (positive class): 52%
+
+🔎 Explainability:
+Used SHAP values → Key predictors: Age, Cholesterol, BMI.
+
+📈 Drug Sales Forecasting
+
+SARIMA models were applied on monthly sales data for drugs with ≥24 months history.
+
+Seasonal order: (1,1,1,12) → capturing yearly trends.
+
+Metrics used: RMSE, MAE, MAPE.
+
+Results:
+
+ATORVASTATIN → MAPE: 3.7% (high accuracy)
+
+METFORMIN → MAPE: 5.6%
+
+ALBURX → MAPE: 11.5%
+
+📊 Insight: Reliable sales forecasts support inventory & demand planning.
+
+🧠 NLP for Adverse Event Classification
+
+Built an NLP pipeline to classify AE reports as serious or nonserious.
+
+Preprocessing: Lowercasing, tokenization, lemmatization.
+
+Vectorization: TF-IDF features.
+
+Model: Logistic Regression (class weights balanced).
+
+Performance:
+
+Accuracy: 86%
+
+F1 Score: 0.87
+
+ROC-AUC: 0.88
+
+⚕️ Insight: Automating AE triage helps prioritize urgent safety cases.
+
+✅ Key Outcomes
+
+Patient Risk Prediction – Identified critical risk factors for heart disease.
+
+Sales Forecasting – Produced accurate demand predictions for key drugs.
+
+Pharmacovigilance NLP –  AE classification model with strong performance.
+
+🛠️ Tech Stack
+
+Data Handling: Pandas, NumPy, SQLite
+
+Modeling: Scikit-learn, Imbalanced-learn (SMOTE), Statsmodels (SARIMA)
+
+Explainability: SHAP
+
+Visualization: Matplotlib, Seaborn
+
+NLP: TF-IDF, Logistic Regression
+
+📌 Conclusion
+
+This project demonstrates how integrating ML, time-series forecasting, and NLP into a unified BI pipeline can create a powerful decision-support system for pharmaceutical companies.
+
